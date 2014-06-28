@@ -7,6 +7,7 @@ using Lombiq.OrchardAppHost.Configuration;
 using Orchard.Environment.Configuration;
 using Orchard.Logging;
 using Orchard.Services;
+using Orchard.Settings;
 
 namespace Lombiq.OrchardAppHost.Sample
 {
@@ -16,10 +17,11 @@ namespace Lombiq.OrchardAppHost.Sample
         {
             var settings = new AppHostSettings
             {
+                AppDataFolderPath = "~/App_Data",
                 ModuleFolderPaths = new[] { @"E:\Projects\Munka\Lombiq\Orchard Dev Hg\src\Orchard.Web\Modules" },
                 CoreModuleFolderPaths = new[] { @"E:\Projects\Munka\Lombiq\Orchard Dev Hg\src\Orchard.Web\Core" },
                 ThemeFolderPaths = new[] { @"E:\Projects\Munka\Lombiq\Orchard Dev Hg\src\Orchard.Web\Themes" },
-                ImportedExtensionAssemblies = new[] { typeof(Program).Assembly }
+                ImportedExtensions = new[] { typeof(Program).Assembly }
             };
 
             using (var host = new OrchardAppHost(settings))
@@ -34,12 +36,19 @@ namespace Lombiq.OrchardAppHost.Sample
                 {
                     Console.WriteLine("Cycle");
 
-                    host.RunInTransaction(ShellSettings.DefaultName, scope =>
+                    host.RunInTransaction(scope =>
                     {
                         scope.Resolve<ILoggerService>().Error("Test log entry.");
                         Console.WriteLine(scope.Resolve<IClock>().UtcNow.ToString());
-                        //Console.WriteLine(scope.Resolve<ISiteService>().GetSiteSettings().SiteName);
                     });
+
+                    host.Run<ISiteService, ShellSettings>((siteService, shellSettings) =>
+                        {
+                            Console.WriteLine(siteService.GetSiteSettings().SiteName);
+                            Console.WriteLine(shellSettings.Name);
+                        });
+
+                    Console.WriteLine();
 
                     System.Threading.Thread.Sleep(1500);
                 }
