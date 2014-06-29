@@ -8,6 +8,8 @@ using Orchard.Environment.Configuration;
 using Orchard.Logging;
 using Orchard.Services;
 using Orchard.Settings;
+using Lombiq.OrchardAppHost.Services;
+using Orchard.Environment.Descriptor.Models;
 
 namespace Lombiq.OrchardAppHost.Sample
 {
@@ -21,13 +23,23 @@ namespace Lombiq.OrchardAppHost.Sample
                 ModuleFolderPaths = new[] { @"E:\Projects\Munka\Lombiq\Orchard Dev Hg\src\Orchard.Web\Modules" },
                 CoreModuleFolderPaths = new[] { @"E:\Projects\Munka\Lombiq\Orchard Dev Hg\src\Orchard.Web\Core" },
                 ThemeFolderPaths = new[] { @"E:\Projects\Munka\Lombiq\Orchard Dev Hg\src\Orchard.Web\Themes" },
-                ImportedExtensions = new[] { typeof(Program).Assembly }
+                ImportedExtensions = new[] { new ShellExtensions { ShellName = ShellSettings.DefaultName, Extensions = new[] { typeof(Program).Assembly } } }
             };
 
-            using (var host = new OrchardAppHost(settings))
-            {
-                host.Startup();
+            //var enabledFeatures = new[] { new ShellFeature { Name = "Settings" } };
+            //using (var host = OrchardAppHostFactory.StartTransientHost(settings, null, enabledFeatures))
+            //{
+            //    host.Run<ILoggerService, IClock>((logger, clock) =>
+            //    {
+            //        logger.Error("Test log entry.");
+            //        Console.WriteLine(clock.UtcNow.ToString());
+            //    });
+            //}
 
+            //Console.ReadKey();
+
+            using (var host = OrchardAppHostFactory.StartHost(settings))
+            {
                 var run = true;
 
                 Console.CancelKeyPress += (sender, e) => run = false;
@@ -38,15 +50,15 @@ namespace Lombiq.OrchardAppHost.Sample
 
                     host.RunInTransaction(scope =>
                     {
-                        scope.Resolve<ILoggerService>().Error("Test log entry.");
-                        Console.WriteLine(scope.Resolve<IClock>().UtcNow.ToString());
+                        Console.WriteLine(scope.Resolve<ISiteService>().GetSiteSettings().SiteName);
+                        Console.WriteLine(scope.Resolve < ShellSettings>().Name);
                     });
 
-                    host.Run<ISiteService, ShellSettings>((siteService, shellSettings) =>
-                        {
-                            Console.WriteLine(siteService.GetSiteSettings().SiteName);
-                            Console.WriteLine(shellSettings.Name);
-                        });
+                    host.Run<ILoggerService, IClock>((logger, clock) =>
+                    {
+                        logger.Error("Test log entry.");
+                        Console.WriteLine(clock.UtcNow.ToString());
+                    });
 
                     Console.WriteLine();
 
