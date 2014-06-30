@@ -29,17 +29,21 @@ namespace Lombiq.OrchardAppHost.Sample
                 DisableConfiguratonCaches = true
             };
 
-            //var enabledFeatures = new[] { new ShellFeature { Name = "Settings" } };
-            //using (var host = OrchardAppHostFactory.StartTransientHost(settings, null, enabledFeatures))
-            //{
-            //    host.Run<ILoggerService, IClock>((logger, clock) =>
-            //    {
-            //        logger.Error("Test log entry.");
-            //        Console.WriteLine(clock.UtcNow.ToString());
-            //    });
-            //}
 
-            //Console.ReadKey();
+            using (var host = OrchardAppHostFactory.StartTransientHost(settings, null, null))
+            {
+                host.Run<IClock>((clock) =>
+                {
+                    Console.WriteLine(clock.UtcNow.ToString());
+                }, wrapInTransaction: false);
+
+                host.Run<ILoggerService, IClock>((logger, clock) =>
+                {
+                    logger.Error("Test log entry from transient shell.");
+                    Console.WriteLine(clock.UtcNow.ToString());
+                }, wrapInTransaction: false); // Mustn't use transactions for transient hosts.
+            }
+
 
             using (var host = OrchardAppHostFactory.StartHost(settings))
             {
@@ -47,8 +51,8 @@ namespace Lombiq.OrchardAppHost.Sample
 
                 Console.CancelKeyPress += (sender, e) => run = false;
 
-                // We can even run the setup on a new shell. A reference to Orchard.Setup is needed.
-                // The setup shouldn't run in a transaction.
+                //// We can even run the setup on a new shell. A reference to Orchard.Setup is needed.
+                //// The setup shouldn't run in a transaction.
                 //host.Run<ISetupService, ShellSettings>((setupService, shellSettings) =>
                 //{
                 //    Console.WriteLine("Running setup for the following shell: " + shellSettings.Name);
@@ -62,7 +66,7 @@ namespace Lombiq.OrchardAppHost.Sample
                 //        });
 
                 //    Console.WriteLine("Setup done");
-                //}, ShellSettings.DefaultName, false);
+                //}, wrapInTransaction: false);
 
                 //// After setup everything else should run in a separate scope.
                 //host.Run<ISiteService, ShellSettings>((siteService, shellSettings) =>
@@ -70,6 +74,7 @@ namespace Lombiq.OrchardAppHost.Sample
                 //    Console.WriteLine(siteService.GetSiteSettings().SiteName);
                 //    Console.WriteLine(shellSettings.Name);
                 //});
+
 
                 while (run)
                 {
