@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Lombiq.OrchardAppHost.Configuration;
-using Orchard;
 using Orchard.Environment.Configuration;
 using Orchard.Settings;
 using Orchard.Setup.Services;
