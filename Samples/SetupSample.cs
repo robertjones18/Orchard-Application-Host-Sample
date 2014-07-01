@@ -36,7 +36,6 @@ namespace Lombiq.OrchardAppHost.Sample.Samples
                                 Recipe = "Default"
                             });
 
-                        //Console.WriteLine(wc.GetContext().Resolve<ISiteService>().GetSiteSettings().SiteName);
                         Console.WriteLine("Setup done");
                     }), wrapInTransaction: false);
 

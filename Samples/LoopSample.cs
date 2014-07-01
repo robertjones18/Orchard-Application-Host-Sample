@@ -24,8 +24,12 @@ namespace Lombiq.OrchardAppHost.Sample.Samples
             {
                 var run = true;
 
-                // So we can exit the loop.
-                Console.CancelKeyPress += (sender, e) => run = false;
+                // Hit Ctrl+C to exit the loop, but not the app (other samples will follow up).
+                Console.CancelKeyPress += (sender, e) =>
+                    {
+                        e.Cancel = true;
+                        run = false;
+                    };
 
 
                 while (run)
