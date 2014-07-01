@@ -1,0 +1,34 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Lombiq.OrchardAppHost.Configuration;
+using Orchard.Logging;
+using Orchard.Services;
+
+namespace Lombiq.OrchardAppHost.Sample.Samples
+{
+    /// <summary>
+    /// Demonstrates how to use an extremely light-weight transient host when we don't need the persistence layer.
+    /// </summary>
+    static class TransientHostSample
+    {
+        public static async Task RunSample(AppHostSettings settings)
+        {
+            Console.WriteLine("=== Transient host sample starts === ");
+
+            using (var host = await OrchardAppHostFactory.StartTransientHost(settings, null, null))
+            {
+                await host.Run<ITestService, ILoggerService, IClock>((testService, logger, clock) => Task.Run(() =>
+                    {
+                        testService.Test(); // Custom dependencies from imported and enabled extensions work too.
+                        logger.Error("Test log entry from transient shell.");
+                        Console.WriteLine(clock.UtcNow.ToString());
+                    }), wrapInTransaction: false); // Mustn't use transactions for transient hosts.
+            }
+
+            Console.WriteLine("=== Transient host sample ended === ");
+        }
+    }
+}

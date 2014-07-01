@@ -11,6 +11,9 @@ using Orchard.Settings;
 using Lombiq.OrchardAppHost.Services;
 using Orchard.Environment.Descriptor.Models;
 using Orchard.Setup.Services;
+using Orchard;
+using Orchard.Mvc;
+using Lombiq.OrchardAppHost.Sample.Samples;
 
 namespace Lombiq.OrchardAppHost.Sample
 {
@@ -18,86 +21,39 @@ namespace Lombiq.OrchardAppHost.Sample
     {
         static void Main(string[] args)
         {
-            var settings = new AppHostSettings
-            {
-                AppDataFolderPath = "~/App_Data",
-                ModuleFolderPaths = new[] { @"E:\Projects\Munka\Lombiq\Orchard Dev Hg\src\Orchard.Web\Modules" },
-                CoreModuleFolderPaths = new[] { @"E:\Projects\Munka\Lombiq\Orchard Dev Hg\src\Orchard.Web\Core" },
-                ThemeFolderPaths = new[] { @"E:\Projects\Munka\Lombiq\Orchard Dev Hg\src\Orchard.Web\Themes" },
-                ImportedExtensions = new[] { typeof(Program).Assembly, typeof(IOrchardAppHost).Assembly },
-                DefaultShellFeatureStates = new[] { new DefaultShellFeatureState { ShellName = ShellSettings.DefaultName, EnabledFeatures = new[] { "Lombiq.OrchardAppHost", "Lombiq.OrchardAppHost.Sample.ShellEvents" } } },
-                DisableConfiguratonCaches = true
-            };
-
-
-            using (var host = OrchardAppHostFactory.StartTransientHost(settings, null, null))
-            {
-                host.Run<IClock>((clock) =>
+            Task.Run(async () =>
                 {
-                    Console.WriteLine(clock.UtcNow.ToString());
-                }, wrapInTransaction: false);
-
-                host.Run<ILoggerService, IClock>((logger, clock) =>
-                {
-                    logger.Error("Test log entry from transient shell.");
-                    Console.WriteLine(clock.UtcNow.ToString());
-                }, wrapInTransaction: false); // Mustn't use transactions for transient hosts.
-            }
-
-
-            using (var host = OrchardAppHostFactory.StartHost(settings))
-            {
-                var run = true;
-
-                Console.CancelKeyPress += (sender, e) => run = false;
-
-                //// We can even run the setup on a new shell. A reference to Orchard.Setup is needed.
-                //// The setup shouldn't run in a transaction.
-                //host.Run<ISetupService, ShellSettings>((setupService, shellSettings) =>
-                //{
-                //    Console.WriteLine("Running setup for the following shell: " + shellSettings.Name);
-                //    setupService.Setup(new SetupContext
-                //        {
-                //            SiteName = "Test",
-                //            AdminUsername = "admin",
-                //            AdminPassword = "password",
-                //            DatabaseProvider = "SqlCe",
-                //            Recipe = "Default"
-                //        });
-
-                //    Console.WriteLine("Setup done");
-                //}, wrapInTransaction: false);
-
-                //// After setup everything else should run in a separate scope.
-                //host.Run<ISiteService, ShellSettings>((siteService, shellSettings) =>
-                //{
-                //    Console.WriteLine(siteService.GetSiteSettings().SiteName);
-                //    Console.WriteLine(shellSettings.Name);
-                //});
-
-
-                while (run)
-                {
-                    Console.WriteLine("Cycle");
-
-                    host.Run<ILoggerService, IClock>((logger, clock) =>
+                    // There are a lot of settings you can use.
+                    var settings = new AppHostSettings
                     {
-                        logger.Error("Test log entry.");
-                        Console.WriteLine(clock.UtcNow.ToString());
-                    });
+                        AppDataFolderPath = "~/App_Data" + new Random().Next(), // A random App_Data folder so the setup sample can run from a fresh state.
+                        ModuleFolderPaths = new[] { @"E:\Projects\Munka\Lombiq\Orchard Dev Hg\src\Orchard.Web\Modules" },
+                        CoreModuleFolderPaths = new[] { @"E:\Projects\Munka\Lombiq\Orchard Dev Hg\src\Orchard.Web\Core" },
+                        ThemeFolderPaths = new[] { @"E:\Projects\Munka\Lombiq\Orchard Dev Hg\src\Orchard.Web\Themes" },
+                        ImportedExtensions = new[] { typeof(Program).Assembly, typeof(IOrchardAppHost).Assembly },
+                        DefaultShellFeatureStates = new[]
+                        {
+                            new DefaultShellFeatureState
+                            {
+                                ShellName = ShellSettings.DefaultName,
+                                EnabledFeatures = new[] { "Lombiq.OrchardAppHost.Sample", "Lombiq.OrchardAppHost.Sample.ShellEvents" }
+                            }
+                        },
+                        DisableConfiguratonCaches = true
+                    };
 
-                    // Another overload of Run() for simple transaction handling and for using the work context scope directly.
-                    host.RunInTransaction(scope =>
-                    {
-                        Console.WriteLine(scope.Resolve<ISiteService>().GetSiteSettings().SiteName);
-                        Console.WriteLine(scope.Resolve<ShellSettings>().Name);
-                    });
 
+                    // Samples are being run below, check out the static classes.
+
+                    await SetupSample.RunSample(settings);
                     Console.WriteLine();
+                    await LoopSample.RunSample(settings);
+                    Console.WriteLine();
+                    await TransientHostSample.RunSample(settings);
+                    
 
-                    System.Threading.Thread.Sleep(1500);
-                }
-            }
+                    Console.ReadKey();
+                }).Wait(); // This is a workaround just to be able to run all this from inside a console app.
         }
     }
 }
