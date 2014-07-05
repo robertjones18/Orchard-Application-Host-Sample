@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Lombiq.OrchardAppHost.Configuration;
+using Lombiq.OrchardAppHost.Sample.Services;
 using Orchard.Logging;
 using Orchard.Services;
 

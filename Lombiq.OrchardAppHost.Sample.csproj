@@ -51,8 +51,9 @@
     <Compile Include="Samples\LoopSample.cs" />
     <Compile Include="Samples\SetupSample.cs" />
     <Compile Include="Samples\TransientHostSample.cs" />
-    <Compile Include="ShellEventsTest.cs" />
-    <Compile Include="TestService.cs" />
+    <Compile Include="Services\AsyncBackgroundTaskSample.cs" />
+    <Compile Include="Services\ShellEventsTest.cs" />
+    <Compile Include="Services\TestService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

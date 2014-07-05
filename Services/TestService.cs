@@ -1,7 +1,8 @@
 ﻿using Orchard;
 
-namespace Lombiq.OrchardAppHost.Sample
+namespace Lombiq.OrchardAppHost.Sample.Services
 {
+    // Dependencies get registered in the usual way.
     public interface ITestService : IDependency
     {
         void Test();
