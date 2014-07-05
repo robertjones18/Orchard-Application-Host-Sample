@@ -21,13 +21,13 @@ namespace Lombiq.OrchardAppHost.Sample
                         ModuleFolderPaths = new[] { @"E:\Projects\Munka\Lombiq\Orchard Dev Hg\src\Orchard.Web\Modules" },
                         CoreModuleFolderPaths = new[] { @"E:\Projects\Munka\Lombiq\Orchard Dev Hg\src\Orchard.Web\Core" },
                         ThemeFolderPaths = new[] { @"E:\Projects\Munka\Lombiq\Orchard Dev Hg\src\Orchard.Web\Themes" },
-                        ImportedExtensions = new[] { typeof(Program).Assembly, typeof(IOrchardAppHost).Assembly },
+                        ImportedExtensions = new[] { typeof(Program).Assembly },
                         DefaultShellFeatureStates = new[]
                         {
                             new DefaultShellFeatureState
                             {
                                 ShellName = ShellSettings.DefaultName,
-                                EnabledFeatures = new[] { "Lombiq.OrchardAppHost", "Lombiq.OrchardAppHost.Sample", "Lombiq.OrchardAppHost.Sample.ShellEvents" }
+                                EnabledFeatures = new[] { "Lombiq.OrchardAppHost.Sample", "Lombiq.OrchardAppHost.Sample.ShellEvents" }
                             }
                         },
                         DisableConfiguratonCaches = true
