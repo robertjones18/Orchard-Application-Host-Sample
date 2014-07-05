@@ -15,8 +15,7 @@ namespace Lombiq.OrchardAppHost.Sample
                     // There are a lot of settings you can use.
                     var settings = new AppHostSettings
                     {
-                        // A random App_Data folder so the setup sample can run from a fresh state. Beware that the location of log files is
-                        // configured separately from log4net.config.
+                        // A random App_Data folder so the setup sample can run from a fresh state.
                         AppDataFolderPath = "~/App_Data" + new Random().Next(),
                         ModuleFolderPaths = new[] { @"E:\Projects\Munka\Lombiq\Orchard Dev Hg\src\Orchard.Web\Modules" },
                         CoreModuleFolderPaths = new[] { @"E:\Projects\Munka\Lombiq\Orchard Dev Hg\src\Orchard.Web\Core" },
