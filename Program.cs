@@ -29,7 +29,8 @@ namespace Lombiq.OrchardAppHost.Sample
                                 EnabledFeatures = new[] { "Lombiq.OrchardAppHost.Sample", "Lombiq.OrchardAppHost.Sample.ShellEvents" }
                             }
                         },
-                        DisableConfiguratonCaches = true
+                        DisableConfiguratonCaches = true,
+                        DisableExtensionMonitoring = true
                     };
 
 
