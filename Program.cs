@@ -17,9 +17,9 @@ namespace Lombiq.OrchardAppHost.Sample
                     {
                         // A random App_Data folder so the setup sample can run from a fresh state.
                         AppDataFolderPath = "~/App_Data" + new Random().Next(),
-                        ModuleFolderPaths = new[] { @"E:\Projects\Munka\Lombiq\Orchard Dev Hg\src\Orchard.Web\Modules" },
-                        CoreModuleFolderPaths = new[] { @"E:\Projects\Munka\Lombiq\Orchard Dev Hg\src\Orchard.Web\Core" },
-                        ThemeFolderPaths = new[] { @"E:\Projects\Munka\Lombiq\Orchard Dev Hg\src\Orchard.Web\Themes" },
+                        ModuleFolderPaths = new[] { @"~/../../../Orchard.Web/Modules" },
+                        CoreModuleFolderPaths = new[] { @"~/../../../Orchard.Web/Core" },
+                        ThemeFolderPaths = new[] { @"~/../../../Orchard.Web/Themes" },
                         ImportedExtensions = new[] { typeof(Program).Assembly },
                         DefaultShellFeatureStates = new[]
                         {
