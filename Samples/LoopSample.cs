@@ -16,6 +16,7 @@ namespace Lombiq.OrchardAppHost.Sample.Samples
         public static async Task RunSample(AppHostSettings settings)
         {
             Console.WriteLine("=== Loop sample starts === ");
+            Console.WriteLine("Press Ctrl+C to exit the loop.");
 
             using (var host = await OrchardAppHostFactory.StartHost(settings))
             {

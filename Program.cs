@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using log4net.Core;
+using log4net.Repository.Hierarchy;
 using Lombiq.OrchardAppHost.Configuration;
 using Lombiq.OrchardAppHost.Sample.Samples;
 using Orchard.Environment.Configuration;
@@ -30,7 +32,10 @@ namespace Lombiq.OrchardAppHost.Sample
                             }
                         },
                         DisableConfiguratonCaches = true,
-                        DisableExtensionMonitoring = true
+                        DisableExtensionMonitoring = true,
+                        // Configuring the logging of SQL queries (see: http://weblogs.asp.net/bleroy/logging-sql-queries-in-orchard).
+                        // This needs a reference to the Log4Net assembly.
+                        Log4NetConfigurator = loggerRespository => ((Logger)loggerRespository.GetLogger("NHibernate.SQL")).Level = Level.Debug
                     };
 
 
