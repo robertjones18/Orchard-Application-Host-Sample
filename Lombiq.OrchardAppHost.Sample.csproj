@@ -34,13 +34,13 @@
   <ItemGroup>
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\log4net\log4net.dll</HintPath>
+      <HintPath>..\Orchard\lib\log4net\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\sqlce\System.Data.SqlServerCe.dll</HintPath>
+      <HintPath>..\Orchard\lib\sqlce\System.Data.SqlServerCe.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml.Linq" />
@@ -69,15 +69,15 @@
       <Project>{3e852853-2d19-49bb-b6c9-39b01d6e9785}</Project>
       <Name>Lombiq.OrchardAppHost</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Orchard.Web\Core\Orchard.Core.csproj">
+    <ProjectReference Include="..\Orchard\src\Orchard.Web\Core\Orchard.Core.csproj">
       <Project>{9916839c-39fc-4ceb-a5af-89ca7e87119f}</Project>
       <Name>Orchard.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Orchard.Web\Modules\Orchard.Setup\Orchard.Setup.csproj">
+    <ProjectReference Include="..\Orchard\src\Orchard.Web\Modules\Orchard.Setup\Orchard.Setup.csproj">
       <Project>{8c7fcbc2-e6e1-405e-bfb5-d8d9e67a09c4}</Project>
       <Name>Orchard.Setup</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Orchard\Orchard.Framework.csproj">
+    <ProjectReference Include="..\Orchard\src\Orchard\Orchard.Framework.csproj">
       <Project>{2d1d92bb-4555-4cbe-8d0e-63563d6ce4c6}</Project>
       <Name>Orchard.Framework</Name>
     </ProjectReference>
