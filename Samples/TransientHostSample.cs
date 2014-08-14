@@ -24,6 +24,9 @@ namespace Lombiq.OrchardAppHost.Sample.Samples
                         logger.Error("Test log entry from transient shell.");
                         Console.WriteLine(clock.UtcNow.ToString());
                     }), wrapInTransaction: false); // Mustn't use transactions for transient hosts.
+
+                // You can even run such "getters" to just fetch something from Orchard.
+                var utcNow = await host.RunGet(scope => Task.Run(() => scope.Resolve<IClock>().UtcNow), wrapInTransaction: false);
             }
 
             Console.WriteLine("=== Transient host sample ended === ");
