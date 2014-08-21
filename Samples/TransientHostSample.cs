@@ -26,7 +26,7 @@ namespace Lombiq.OrchardAppHost.Sample.Samples
                     }));
 
                 // You can even run such "getters" to just fetch something from Orchard.
-                var utcNow = await host.RunGet(scope => Task.Run(() => scope.Resolve<IClock>().UtcNow), wrapInTransaction: false);
+                var utcNow = await host.RunGet(scope => Task.Run(() => scope.Resolve<IClock>().UtcNow));
             }
 
             Console.WriteLine("=== Transient host sample ended === ");
