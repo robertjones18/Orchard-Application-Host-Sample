@@ -41,13 +41,14 @@ namespace Lombiq.OrchardAppHost.Sample.Samples
                             Console.WriteLine(clock.UtcNow.ToString());
                         }));
 
-                    // Another overload of Run() for simple transaction handling and for using the work context scope directly.
+                    // Another overload of Run() for simple transaction handling and for using the work context scope 
+                    // directly.
                     await host.RunInTransaction(async scope =>
                         {
                             Console.WriteLine(scope.Resolve<ISiteService>().GetSiteSettings().SiteName);
 
-                            // Simulating an async call. Because of this the delegate is marked as async (and we don't need to wrap it
-                            // into a Task.Run()).
+                            // Simulating an async call. Because of this the delegate is marked as async (and we don't
+                            // need to wrap it into a Task.Run()).
                             await Task.Delay(3000);
 
                             Console.WriteLine(scope.Resolve<ISiteService>().GetSiteSettings().SiteName);

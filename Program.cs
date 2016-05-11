@@ -28,14 +28,20 @@ namespace Lombiq.OrchardAppHost.Sample
                             new DefaultShellFeatureState
                             {
                                 ShellName = ShellSettings.DefaultName,
-                                EnabledFeatures = new[] { "Lombiq.OrchardAppHost.Sample", "Lombiq.OrchardAppHost.Sample.ShellEvents" }
+                                EnabledFeatures = new[]
+                                {
+                                    "Lombiq.OrchardAppHost.Sample",
+                                    "Lombiq.OrchardAppHost.Sample.ShellEvents"
+                                }
                             }
                         },
                         DisableConfiguratonCaches = true,
                         DisableExtensionMonitoring = true,
-                        // Configuring the logging of SQL queries (see: http://weblogs.asp.net/bleroy/logging-sql-queries-in-orchard).
+                        // Configuring the logging of SQL queries (see: 
+                        // http://weblogs.asp.net/bleroy/logging-sql-queries-in-orchard).
                         // This needs a reference to the Log4Net assembly.
-                        Log4NetConfigurator = loggerRespository => ((Logger)loggerRespository.GetLogger("NHibernate.SQL")).Level = Level.Debug
+                        Log4NetConfigurator = loggerRespository => 
+                            ((Logger)loggerRespository.GetLogger("NHibernate.SQL")).Level = Level.Debug
                     };
 
 
