@@ -4,6 +4,7 @@ using Lombiq.OrchardAppHost.Configuration;
 using Orchard.Environment.Configuration;
 using Orchard.Settings;
 using Orchard.Setup.Services;
+using System.Linq;
 
 namespace Lombiq.OrchardAppHost.Sample.Samples
 {
@@ -24,23 +25,26 @@ namespace Lombiq.OrchardAppHost.Sample.Samples
                     {
                         Console.WriteLine("Running setup for the following shell: " + shellSettings.Name);
                         setupService.Setup(new SetupContext
-                            {
-                                SiteName = "Test",
-                                AdminUsername = "admin",
-                                AdminPassword = "password",
-                                DatabaseProvider = "SqlCe",
-                                Recipe = "Default"
-                            });
+                        {
+                            SiteName = "Test",
+                            AdminUsername = "admin",
+                            AdminPassword = "password",
+                            DatabaseProvider = "SqlCe",
+                            Recipe = setupService.Recipes().Where(recipe => recipe.Name == "Default").Single()
+                        });
 
                         Console.WriteLine("Setup done");
                     }), wrapInTransaction: false);
+            }
 
-                // After setup everything else should be run in a separate scope.
+            using (var host = await OrchardAppHostFactory.StartHost(settings))
+            {
+                // After setup everything else should be run in a newly started host.
                 await host.Run<ISiteService, ShellSettings>((siteService, shellSettings) => Task.Run(() =>
-                    {
-                        Console.WriteLine(siteService.GetSiteSettings().SiteName);
-                        Console.WriteLine(shellSettings.Name);
-                    }));
+                {
+                    Console.WriteLine(siteService.GetSiteSettings().SiteName);
+                    Console.WriteLine(shellSettings.Name);
+                }));
             }
 
             Console.WriteLine("=== Setup host sample ended === ");
