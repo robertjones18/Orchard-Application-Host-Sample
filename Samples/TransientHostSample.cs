@@ -18,15 +18,19 @@ namespace Lombiq.OrchardAppHost.Sample.Samples
 
             using (var host = await OrchardAppHostFactory.StartTransientHost(settings, null, null))
             {
-                await host.Run<ITestService, ILoggerService, IClock>((testService, logger, clock) => Task.Run(() =>
+                await host.Run<ITestService, ILoggerService, IClock>((testService, logger, clock) =>
                     {
                         testService.Test(); // Custom dependencies from imported and enabled extensions work too.
                         logger.Error("Test log entry from transient shell.");
                         Console.WriteLine(clock.UtcNow.ToString());
-                    }));
 
-                // You can even run such "getters" to just fetch something from Orchard.
-                var utcNow = await host.RunGet(scope => Task.Run(() => scope.Resolve<IClock>().UtcNow));
+                        // If there's nothing async int the delegate you can just simply return a completed Task too.
+                        return Task.CompletedTask;
+                    });
+
+                // You can even run such "getters" to just fetch something from Orchard. Note that you can use
+                // Task.FromResult() as well.
+                var utcNow = await host.RunGet(scope => Task.FromResult(scope.Resolve<IClock>().UtcNow));
             }
 
             Console.WriteLine("=== Transient host sample ended === ");
